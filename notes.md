@@ -1,38 +1,36 @@
-This is some content changing.
-Just for the assignment, but I'll probably also take class notes here.
-And any other notes as applicable.
 
-Java Fundamentals:
-    <li>Solved the pointer problem by creating references
-    <li>Data types are always the same size to make the code more portable.
-    <li>if(x = 1) is a compile error, meaning an integer is not equal to a boolean. Must use if(x == 1).
-    <li>Dynamic linking - once it is complied, it's good to go. It uses a JBM to load and reference any external objections
-    <li>Is a hybrid compiled/interpreted language.
-    <li>Generally slightly slower than C++.
+# Java Fundamentals:
+- **Pointer Problem**: Solved the pointer problem by creating references.
+- **Data Types**: Data types are always the same size to make the code more portable.
+- **Boolean Check**: `if(x = 1)` is a compile error, meaning an integer is not equal to a boolean. Must use `if(x == 1)`.
+- **Dynamic Linking**: Once it is compiled, it's good to go. It uses a JVM to load and reference any external objects.
+- **Hybrid Nature**: Java is a hybrid compiled/interpreted language.
+- **Performance**: Generally slightly slower than C++.
 
-Compiled code uses C to write the code, then uses a compiler to make the executable work for the machine it's in.
-Compiled code is fast.
+## Compiled Code
+- **Description**: Uses C to write the code, then uses a compiler to make the executable work for the machine it's on.
+- **Speed**: Fast execution.
 
-Interpreted code if you have an interpreter on your machine then it runs on your machine.
-Interpreted code is slow.
+## Interpreted Code
+- **Description**: If you have an interpreter on your machine, then it runs on your machine.
+- **Speed**: Slower execution compared to compiled code.
 
-Java Architecture:
-    <li>Source code -> Compiler (rules of the machine it runs on (machine specification) -> Java Byte Code (an imaginary machine specification (how big an int should be)) -> Interpreter (JVM, not much translation).
-    <li>JVM keeps track of statistics, then if it determines compiling it a different way would compile faster, and changes the compile strategy to be faster.
-    <li>The HotSpot Virtual Machine - Determines the statistics and what to change when compiling.
-    
-Writing, Compiling, and Running Java Code:
-    <li>Can't create standalone functions, everything must be a class. Most of the time, a script must have 1 or more classes.
-    <li>something.java -> COMPILE -> something.class.
-    <li>The Main Method: public static void main(String [] args) || public static void main(String...args) (second is for csv's)
-    <li>Top level class: public class SimpleJavaClass
-        <li>Can be public or not specified.
-        <li>The class name must be the same name as the .java file it is in.
-        <li>Not every class must have a main method, but if it has a main, it can be executed.
-        <li>A function inside a class is a method.
-    <li>Always name toString and equals the same for consistency across classes.
-    <li>How do you access/find other classes? (This is what dynamic linking is)
-        <li>Quick answer it goes and finds them on its own.
-        <li>
-    <li>IMPORTANT: If the code is not working but looks right, Invalidate Caches, Rebuild Project.
-    <li>
+# Java Architecture:
+- **Compilation Process**: Source code -> Compiler (rules of the machine it runs on) -> Java Byte Code (an imaginary machine specification) -> Interpreter (JVM, minimal translation).
+- **JVM Operations**: JVM keeps track of statistics, and if it determines compiling a different way would be faster, it changes the compile strategy.
+- **The HotSpot Virtual Machine**: Determines the statistics and what to change when compiling.
+
+# Writing, Compiling, and Running Java Code:
+- **Class Requirement**: Can't create standalone functions, everything must be a class.
+- **Compilation Steps**: `something.java -> COMPILE -> something.class`.
+- **The Main Method**: `public static void main(String[] args)` or `public static void main(String... args)` (the second is for CSVs).
+- **Top Level Class**: 
+  - **Example**: `public class SimpleJavaClass`
+  - **Visibility**: Can be public or not specified.
+  - **Naming Convention**: The class name must be the same name as the `.java file` it is in.
+  - **Execution**: Not every class must have a main method, but if it has one, it can be executed.
+  - **Method Inside Class**: A function inside a class is called a method.
+- **Naming Consistency**: Always name `toString` and `equals` methods the same for consistency across classes.
+- **Dynamic Linking**: How do you access/find other classes? Quick answer: It goes and finds them on its own.
+- **Troubleshooting Tip**: If the code is not working but looks right, Invalidate Caches, Rebuild Project.
+```
