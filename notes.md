@@ -25,8 +25,14 @@ Writing, Compiling, and Running Java Code:
     <li>Can't create standalone functions, everything must be a class. Most of the time, a script must have 1 or more classes.
     <li>something.java -> COMPILE -> something.class.
     <li>The Main Method: public static void main(String [] args) || public static void main(String...args) (second is for csv's)
-    <li>Top level class
+    <li>Top level class: public class SimpleJavaClass
         <li>Can be public or not specified.
         <li>The class name must be the same name as the .java file it is in.
         <li>Not every class must have a main method, but if it has a main, it can be executed.
+        <li>A function inside a class is a method.
+    <li>Always name toString and equals the same for consistency across classes.
+    <li>How do you access/find other classes? (This is what dynamic linking is)
+        <li>Quick answer it goes and finds them on its own.
         <li>
+    <li>IMPORTANT: If the code is not working but looks right, Invalidate Caches, Rebuild Project.
+    <li>
