@@ -158,7 +158,10 @@ public class ChessPiece {
         ChessPosition oneStepForward = new ChessPosition(row + direction, col);
         if (isWithinBounds(oneStepForward) && board.getPiece(oneStepForward) == null) {
             if (isPromotionRow(oneStepForward)) {
-                moves.add(new ChessMove(myPosition, oneStepForward, ChessPiece.PieceType.QUEEN));
+                moves.add(new ChessMove(myPosition, oneStepForward, PieceType.QUEEN));
+                moves.add(new ChessMove(myPosition, oneStepForward, PieceType.ROOK));
+                moves.add(new ChessMove(myPosition, oneStepForward, PieceType.KNIGHT));
+                moves.add(new ChessMove(myPosition, oneStepForward, PieceType.BISHOP));
             } else {
                 moves.add(new ChessMove(myPosition, oneStepForward, null));
             }
@@ -178,14 +181,16 @@ public class ChessPiece {
                 ChessPiece targetPiece = board.getPiece(capturePosition);
                 if (targetPiece != null && targetPiece.getTeamColor() != this.color) {
                     if (isPromotionRow(capturePosition)) {
-                        moves.add(new ChessMove(myPosition, capturePosition, ChessPiece.PieceType.QUEEN));
+                        moves.add(new ChessMove(myPosition, capturePosition, PieceType.QUEEN));
+                        moves.add(new ChessMove(myPosition, capturePosition, PieceType.ROOK));
+                        moves.add(new ChessMove(myPosition, capturePosition, PieceType.KNIGHT));
+                        moves.add(new ChessMove(myPosition, capturePosition, PieceType.BISHOP));
                     } else {
                         moves.add(new ChessMove(myPosition, capturePosition, null));
                     }
                 }
             }
         }
-    
         return moves;
     }
     
@@ -196,8 +201,8 @@ public class ChessPiece {
     
     // Is the pawn on the edge of the board
     private boolean isPromotionRow(ChessPosition position) {
-        return (this.color == ChessGame.TeamColor.WHITE && position.getRow() == 1) || 
-               (this.color == ChessGame.TeamColor.BLACK && position.getRow() == 8);
+        return (this.color == ChessGame.TeamColor.WHITE && position.getRow() == 8) ||
+               (this.color == ChessGame.TeamColor.BLACK && position.getRow() == 1);
     }
     
 }
