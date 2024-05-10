@@ -1,7 +1,5 @@
 package chess;
 
-import chess.ChessGame.TeamColor;
-
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -73,7 +71,7 @@ public class ChessPiece {
                 moves.addAll(addLinearMoves(board, myPosition, new int[][]{{1,0}, {0,1}, {-1,0}, {0,-1}},0));
                 break;
             case PAWN:
-                // Still need to make the pawn moves.
+                moves.addAll(addPawnMoves(board, myPosition));
                 break;
         }
         return moves;
@@ -89,7 +87,7 @@ public class ChessPiece {
         for (int[] position : positions) {
             int newRow = myPosition.getRow() + position[0];
             int newCol = myPosition.getColumn() + position[1];
-            if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
+            if (newRow >= 1 && newRow < 9 && newCol >= 1 && newCol < 9) {
                 ChessPosition newPosition = new ChessPosition(newRow, newCol);
                 ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
                 if (pieceAtNewPosition == null || pieceAtNewPosition.getTeamColor() != this.color) {
@@ -113,7 +111,7 @@ public class ChessPiece {
             int nextCol = col + tempCol;
             int steps = 0;
     
-            while (nextRow >= 0 && nextRow < 8 && nextCol >= 0 && nextCol < 8 && (steps < maxSteps || maxSteps == 0)) {
+            while (nextRow >= 1 && nextRow < 9 && nextCol >= 1 && nextCol < 9 && (steps < maxSteps || maxSteps == 0)) {
                 ChessPosition nextPosition = new ChessPosition(nextRow, nextCol);
                 ChessPiece pieceAtNextPosition = board.getPiece(nextPosition);
                 
@@ -131,6 +129,59 @@ public class ChessPiece {
             }
         }
         return moves;
+    }
+
+    // Helper function for pawn
+    private Collection<ChessMove> addPawnMoves(ChessBoard board, ChessPosition myPosition) {
+        Collection<ChessMove> moves = new ArrayList<>();
+        int row = myPosition.getRow();
+        int col = myPosition.getColumn();
+        int direction = (this.color == ChessGame.TeamColor.WHITE) ? -1 : 1;
+        int startRow = (this.color == ChessGame.TeamColor.WHITE) ? 7 : 2;
+    
+        ChessPosition oneStepForward = new ChessPosition(row + direction, col);
+        if (isWithinBounds(oneStepForward) && board.getPiece(oneStepForward) == null) {
+            if (isPromotionRow(oneStepForward)) {
+                moves.add(new ChessMove(myPosition, oneStepForward, ChessPiece.PieceType.QUEEN));
+            } else {
+                moves.add(new ChessMove(myPosition, oneStepForward, null));
+            }
+        }
+    
+        if (row == startRow) {
+            ChessPosition twoStepsForward = new ChessPosition(row + 2 * direction, col);
+            if (isWithinBounds(twoStepsForward) && board.getPiece(oneStepForward) == null && board.getPiece(twoStepsForward) == null) {
+                moves.add(new ChessMove(myPosition, twoStepsForward, null));
+            }
+        }
+    
+        int[] captureCols = {col - 1, col + 1};
+        for (int captureCol : captureCols) {
+            ChessPosition capturePosition = new ChessPosition(row + direction, captureCol);
+            if (isWithinBounds(capturePosition)) {
+                ChessPiece targetPiece = board.getPiece(capturePosition);
+                if (targetPiece != null && targetPiece.getTeamColor() != this.color) {
+                    if (isPromotionRow(capturePosition)) {
+                        moves.add(new ChessMove(myPosition, capturePosition, ChessPiece.PieceType.QUEEN));
+                    } else {
+                        moves.add(new ChessMove(myPosition, capturePosition, null));
+                    }
+                }
+            }
+        }
+    
+        return moves;
+    }
+    
+    // Is the desired position on the board
+    private boolean isWithinBounds(ChessPosition position) {
+        return position.getRow() >= 1 && position.getRow() < 9 && position.getColumn() >= 1 && position.getColumn() < 9;
+    }
+    
+    // Is the pawn on the edge of the board
+    private boolean isPromotionRow(ChessPosition position) {
+        return (this.color == ChessGame.TeamColor.WHITE && position.getRow() == 1) || 
+               (this.color == ChessGame.TeamColor.BLACK && position.getRow() == 8);
     }
     
 }
