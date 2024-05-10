@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * Represents a single chess piece
@@ -29,6 +30,21 @@ public class ChessPiece {
         KNIGHT,
         ROOK,
         PAWN
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ChessPiece that)) return false;
+
+        return color == that.color && pieceType == that.pieceType;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(color);
+        result = 31 * result + Objects.hashCode(pieceType);
+        return result;
     }
 
     /**
@@ -136,8 +152,8 @@ public class ChessPiece {
         Collection<ChessMove> moves = new ArrayList<>();
         int row = myPosition.getRow();
         int col = myPosition.getColumn();
-        int direction = (this.color == ChessGame.TeamColor.WHITE) ? -1 : 1;
-        int startRow = (this.color == ChessGame.TeamColor.WHITE) ? 7 : 2;
+        int direction = (this.color == ChessGame.TeamColor.BLACK) ? -1 : 1;
+        int startRow = (this.color == ChessGame.TeamColor.BLACK) ? 7 : 2;
     
         ChessPosition oneStepForward = new ChessPosition(row + direction, col);
         if (isWithinBounds(oneStepForward) && board.getPiece(oneStepForward) == null) {
