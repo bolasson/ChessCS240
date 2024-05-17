@@ -64,20 +64,17 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessBoard board = getBoard();
         ChessPiece piece = board.getPiece(move.getStartPosition());
-        if (piece == null) throw new InvalidMoveException("No piece at start position");
-        if (piece.getTeamColor() != getTeamTurn()) throw new InvalidMoveException("Not the team's turn");
+        if (piece == null) throw new InvalidMoveException("There's not a piece here");
+        if (piece.getTeamColor() != getTeamTurn()) throw new InvalidMoveException("It's not this team's turn");
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
-        if (!validMoves.contains(move)) throw new InvalidMoveException("Invalid move");
-        ChessBoard oldBoard = getBoard(); //clone board here
-        movePieceOnBoard(move, board);
-        if (isInCheck(piece.getTeamColor())) { throw new InvalidMoveException("Move leaves king in check"); }
+        if (!validMoves.contains(move)) throw new InvalidMoveException("That my good sir, is an invalid move");
+        ChessBoard oldBoard = board.deepClone();
+        makeMove(move);
+        if (isInCheck(piece.getTeamColor())) { 
+            setBoard(oldBoard);
+            throw new InvalidMoveException("My guy, you left your king in check. That's both illegal and a bad idea."); 
+        }
         setBoard(board);
-    }
-
-    public void movePieceOnBoard(ChessMove move, ChessBoard board) {
-        ChessPiece piece = board.getPiece(move.getStartPosition());
-        board.removePiece(move.getStartPosition());
-        board.addPiece(move.getEndPosition(), piece);
     }
 
     /**
