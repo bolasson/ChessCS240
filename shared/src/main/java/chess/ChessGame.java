@@ -11,6 +11,8 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    private ChessBoard activeBoard;
+
     public ChessGame() {
 
     }
@@ -66,11 +68,10 @@ public class ChessGame {
         if (piece.getTeamColor() != getTeamTurn()) throw new InvalidMoveException("Not the team's turn");
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
         if (!validMoves.contains(move)) throw new InvalidMoveException("Invalid move");
-        ChessBoard newBoard = null; //clone board here
-        movePieceOnBoard(move, newBoard);
+        ChessBoard oldBoard = getBoard(); //clone board here
+        movePieceOnBoard(move, board);
         if (isInCheck(piece.getTeamColor())) { throw new InvalidMoveException("Move leaves king in check"); }
-        setBoard(newBoard);
-        throw new RuntimeException("Not implemented");
+        setBoard(board);
     }
 
     public void movePieceOnBoard(ChessMove move, ChessBoard board) {
@@ -152,7 +153,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        activeBoard = board;
     }
 
     /**
@@ -161,6 +162,6 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return activeBoard;
     }
 }

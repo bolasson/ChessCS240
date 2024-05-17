@@ -16,6 +16,20 @@ public class ChessBoard {
         this.board = new ChessPiece[8][8];
     }
 
+    public ChessBoard deepClone() {
+        ChessBoard clone = new ChessBoard();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPiece piece = board[i][j];
+                if (piece != null) {
+                    ChessPiece clonedPiece = new ChessPiece(piece.getTeamColor(), piece.getPieceType());
+                    clone.board[i][j] = clonedPiece;
+                }
+            }
+        }
+        return clone;
+    }
+    
     /**
      * Adds a chess piece to the chessboard
      *
