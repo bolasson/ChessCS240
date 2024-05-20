@@ -29,7 +29,18 @@ public class ChessPiece {
         BISHOP,
         KNIGHT,
         ROOK,
-        PAWN
+        PAWN;
+    }
+
+    @Override
+    public String toString() {
+        String pieceTypeString = pieceType == PieceType.KNIGHT ? "Horse" : pieceType.toString();
+        String firstLetter = pieceTypeString.substring(0, 1);
+        if (color == ChessGame.TeamColor.WHITE) {
+            return "|" + firstLetter.toUpperCase() + "|";
+        } else {
+            return "|" + firstLetter.toLowerCase() + "|";
+        }
     }
 
     @Override

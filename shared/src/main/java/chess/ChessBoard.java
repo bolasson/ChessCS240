@@ -29,7 +29,7 @@ public class ChessBoard {
         }
         return clone;
     }
-    
+
     /**
      * Adds a chess piece to the chessboard
      *
@@ -48,6 +48,13 @@ public class ChessBoard {
         board[row-1][col-1] = null;
     }
 
+    public void makeMove(ChessMove move) {
+        ChessPiece piece = getPiece(move.getStartPosition());
+        removePiece(move.getStartPosition());
+        addPiece(move.getEndPosition(), piece);
+        System.out.println(board.toString());
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;
@@ -59,6 +66,23 @@ public class ChessBoard {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(board);
+    }
+
+    @Override
+    public String toString() {
+        String boardASCII = ""; //"------------------------\n";
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPiece piece = board[i][j];
+                if (piece == null) {
+                    boardASCII += ("| |");
+                } else {
+                    boardASCII += (piece.toString());
+                }
+            }
+            boardASCII += ("\n");//------------------------\n");
+        }
+        return boardASCII;
     }
 
     /**

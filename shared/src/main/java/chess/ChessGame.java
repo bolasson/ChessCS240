@@ -52,11 +52,23 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        ChessBoard board = getBoard();
-        ChessPiece piece = board.getPiece(startPosition);
-        if (piece == null) return null;
-        return piece.pieceMoves(board,startPosition);
+        ChessPiece piece = activeBoard.getPiece(startPosition);
+        if (piece == null || piece.getTeamColor() != teamTurn) return null;
+        Collection<ChessMove> possibleMoves = piece.pieceMoves(activeBoard, startPosition);
+        ChessBoard oldBoard = activeBoard.deepClone();
+        Collection<ChessMove> validMoves = new ArrayList<>();
+        for (ChessMove move : possibleMoves) {
+            activeBoard.makeMove(move);
+            if (!isInCheck(teamTurn)) validMoves.add(move);
+            setBoard(oldBoard);
+        }
+        return validMoves;
     }
+
+    // public static void main(String[] args){
+    //     ChessGame game = new ChessGame();
+    //     System.out.println(game.getBoard().toString());
+    // }
 
     /**
      * Makes a move in a chess game
@@ -69,9 +81,9 @@ public class ChessGame {
         if (validMoves == null || !validMoves.contains(move)) {
             throw new InvalidMoveException("Invalid move");
         }
-        ChessPiece piece = activeBoard.getPiece(move.getStartPosition());
-        activeBoard.removePiece(move.getStartPosition());
-        activeBoard.addPiece(move.getEndPosition(), piece);
+        activeBoard.makeMove(move);
+        setTeamTurn((teamTurn == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE);
+        System.out.println("OFFICIAL GAME MOVE:\n\n" + activeBoard.toString());
     }
 
     /**
@@ -81,30 +93,16 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        ChessBoard board = getBoard();
-        ChessPosition kingPosition = findKingPosition(teamColor, board);
-        Collection<ChessMove> opponentMoves = getAllMoves((teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE, board);
+        ChessPosition kingsPosition = findKingPosition(teamColor, activeBoard);
+        TeamColor opponent = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+        Collection<ChessMove> opponentMoves = getAllMoves(opponent, activeBoard);
         for (ChessMove move : opponentMoves) {
-            if (move.getEndPosition().equals(kingPosition)) {
+            if (move.getEndPosition().equals(kingsPosition)) {
                 return true;
             }
         }
         return false;
     }
-
-    // public static void main(String[] args) {
-    //     ChessGame game = new ChessGame();
-    //     try {
-    //         game.activeBoard.removePiece(new ChessPosition(2, 5));
-    //         game.activeBoard.removePiece(new ChessPosition(7, 5));
-    //         game.makeMove(new ChessMove(new ChessPosition(1, 4), new ChessPosition(2, 5),null));
-    //         game.makeMove(new ChessMove(new ChessPosition(8, 4), new ChessPosition(7, 5),null));
-    //     } catch (InvalidMoveException e) {
-    //         System.out.println("Invalid move: " + e.getMessage());
-    //     }
-    //     boolean inCheck = game.isInCheck(TeamColor.WHITE);
-    //     inCheck = game.isInCheck(TeamColor.BLACK);
-    // }
 
     private ChessPosition findKingPosition(TeamColor teamColor, ChessBoard board) {
         for (int row = 0; row < 8; row++) {
@@ -140,7 +138,20 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (!isInCheck(teamColor)) {
+            System.out.println("Not in check");
+            return false;
+        }
+        Collection<ChessMove> allMoves = getAllMoves(teamColor, activeBoard);
+        for (ChessMove move : allMoves) {
+            ChessBoard clonedBoard = activeBoard.deepClone();
+            clonedBoard.makeMove(move);
+            if (!isInCheck(teamColor)) {
+                System.out.println("There is a move to get out of check");
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
