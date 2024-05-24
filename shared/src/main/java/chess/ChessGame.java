@@ -32,7 +32,7 @@ public class ChessGame {
 
     public ChessGame() {
         this.activeBoard = new ChessBoard();
-        this.teamTurn = TeamColor.BLACK;
+        this.teamTurn = TeamColor.WHITE;
         this.activeBoard.resetBoard();
     }
 
@@ -92,27 +92,28 @@ public class ChessGame {
         return validMoves;
     }
 
-    public static void main(String[] args) {
-        ChessGame game = new ChessGame();
-        game.setBoard(game.loadBoard("""
-        | | | | | | | | |
-        | | |P| | | | | |
-        | | | | | | | | |
-        | | | | | | | | |
-        | | | | | | | | |
-        | | | | | | | | |
-        | | | | |p| | | |
-        | | | | | |Q| | |
-        """));
-        System.out.println(game.activeBoard.toString());
-        game.setTeamTurn(ChessGame.TeamColor.WHITE);
-        ChessMove whitePromotion = new ChessMove(new ChessPosition(7, 3), new ChessPosition(8, 3), ChessPiece.PieceType.QUEEN);
-        try { 
-            game.makeMove(whitePromotion);
-        } catch (InvalidMoveException e) {
-            System.out.println(e.getMessage());
-        }
-    }
+    // public static void main(String[] args) {
+    //     ChessGame game = new ChessGame();
+    //     game.setBoard(game.loadBoard("""
+    //     | | | | | | | | |
+    //     | | |P| | | | | |
+    //     | | | | | | | | |
+    //     | | | | | | | | |
+    //     | | | | | | | | |
+    //     | | | | | | | | |
+    //     | | | | |p| | | |
+    //     | | | | | |Q| | |
+    //     """));
+    //     System.out.println(game.activeBoard.toString());
+    //     game.setTeamTurn(ChessGame.TeamColor.WHITE);
+    //     ChessMove whitePromotion = new ChessMove(new ChessPosition(7, 3), new ChessPosition(8, 3), ChessPiece.PieceType.QUEEN);
+    //     try { 
+    //         game.makeMove(whitePromotion);
+    //     } catch (InvalidMoveException e) {
+    //         System.out.println(e.getMessage());
+    //     }
+    //     System.out.println(game.activeBoard.toString());
+    // }
 
     /**
      * Makes a move in a chess game
@@ -130,13 +131,10 @@ public class ChessGame {
             throw new InvalidMoveException("Illegal move");
         }
         activeBoard.makeMove(move);
-        if(move.getPromotionPiece() != null) { 
-            piece.promotePawn(move);
-            System.out.println("By all accounts I should be getting a promotion...");
+        if(move.getPromotionPiece() != null) {
+            ChessPiece prometedPiece = activeBoard.getPiece(move.getEndPosition());
+            prometedPiece.promotePawn(move);
         }
-        System.out.println(move.getPromotionPiece());
-        System.out.println(piece.getPieceType());
-        System.out.println(activeBoard.toString());
         teamTurn = getOpponent();
     }
 

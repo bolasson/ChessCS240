@@ -53,7 +53,6 @@ public class ChessBoard {
         ChessPiece piece = getPiece(move.getStartPosition());
         addPiece(move.getEndPosition(), piece);
         removePiece(move.getStartPosition());
-        System.out.println(board.toString());
     }
 
     @Override
