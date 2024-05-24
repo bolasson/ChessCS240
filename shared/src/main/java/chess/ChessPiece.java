@@ -29,6 +29,7 @@ public class ChessPiece {
         BISHOP,
         KNIGHT,
         ROOK,
+        XAMPLE,
         PAWN;
     }
 
@@ -70,6 +71,10 @@ public class ChessPiece {
      */
     public PieceType getPieceType() {
         return pieceType;
+    }
+
+    public void promotePawn(ChessMove move) {
+        if(isPromotionRow(move.getEndPosition())) this.pieceType = move.getPromotionPiece();
     }
 
     /**
@@ -216,4 +221,12 @@ public class ChessPiece {
                (this.color == ChessGame.TeamColor.BLACK && position.getRow() == 1);
     }
     
+    public String movesToString(Collection<ChessMove> moves) {
+        StringBuilder sb = new StringBuilder();
+        for (ChessMove move : moves) {
+            sb.append(move.toString());
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }

@@ -20,6 +20,12 @@ public class ChessPosition {
     }
 
     @Override
+    public String toString() {
+        // return "row=" + row + ", col=" + col;
+        return "(" + row + "," + col + ")";
+    }
+
+    @Override
     public int hashCode() {
         int result = row;
         result = 31 * result + col;

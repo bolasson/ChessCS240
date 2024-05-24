@@ -1,6 +1,7 @@
 package chess;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -50,8 +51,8 @@ public class ChessBoard {
 
     public void makeMove(ChessMove move) {
         ChessPiece piece = getPiece(move.getStartPosition());
-        removePiece(move.getStartPosition());
         addPiece(move.getEndPosition(), piece);
+        removePiece(move.getStartPosition());
         System.out.println(board.toString());
     }
 
@@ -71,7 +72,7 @@ public class ChessBoard {
     @Override
     public String toString() {
         String boardASCII = ""; //"------------------------\n";
-        for (int i = 0; i < 8; i++) {
+        for (int i = 7; i > -1; i--) {
             for (int j = 0; j < 8; j++) {
                 ChessPiece piece = board[i][j];
                 if (piece == null) {
@@ -83,6 +84,14 @@ public class ChessBoard {
             boardASCII += ("\n");//------------------------\n");
         }
         return boardASCII;
+    }
+
+    public void printValidMoves(Collection<ChessMove> moves) {
+        ChessBoard board = this.deepClone();
+        for (ChessMove move : moves) {
+            board.addPiece(move.getEndPosition(), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.XAMPLE));
+        }
+        System.out.println(board.toString());
     }
 
     /**
@@ -122,5 +131,21 @@ public class ChessBoard {
         board[7][3] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
         board[0][4] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
         board[7][4] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
+    }
+
+    public void clearBoard() {
+        this.board = new ChessPiece[8][8];
+    }
+
+    public ChessBoard simulateMove(ChessMove move) throws InvalidMoveException {
+        ChessBoard simulatedBoard = this.deepClone();
+        ChessPiece piece = simulatedBoard.getPiece(move.getStartPosition());
+        if (piece == null) {
+            throw new InvalidMoveException("No piece at the start position");
+        }
+        simulatedBoard.removePiece(move.getStartPosition());
+        simulatedBoard.removePiece(move.getEndPosition());
+        simulatedBoard.addPiece(move.getEndPosition(), piece);
+        return simulatedBoard;
     }
 }

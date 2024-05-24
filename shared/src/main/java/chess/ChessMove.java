@@ -59,6 +59,12 @@ public class ChessMove {
      * @return Type of piece to promote a pawn to, or null if no promotion
      */
     public ChessPiece.PieceType getPromotionPiece() {
-        return promotionPiece == null ? null : promotionPiece;
+        return (promotionPiece == null) ? null : promotionPiece;
+    }
+
+    @Override
+    public String toString() {
+        // return "ChessMove{start=" + startPosition + ", end=" + endPosition + ", promotion=" + promotionPiece + '}';
+        return "Can Move To: " + endPosition;
     }
 }
