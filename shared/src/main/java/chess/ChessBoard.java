@@ -140,7 +140,7 @@ public class ChessBoard {
         ChessBoard simulatedBoard = this.deepClone();
         ChessPiece piece = simulatedBoard.getPiece(move.getStartPosition());
         if (piece == null) {
-            throw new InvalidMoveException("No piece at the start position");
+            throw new InvalidMoveException("No piece at the given position");
         }
         simulatedBoard.removePiece(move.getStartPosition());
         simulatedBoard.removePiece(move.getEndPosition());

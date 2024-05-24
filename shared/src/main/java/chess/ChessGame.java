@@ -43,7 +43,9 @@ public class ChessGame {
         return teamTurn;
     }
 
-    public TeamColor getOpponent() { return teamTurn == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE; }
+    public TeamColor getOpponent(TeamColor color) { 
+        return color == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+    }
 
     /**
      * Set's which teams turn it is
@@ -92,29 +94,6 @@ public class ChessGame {
         return validMoves;
     }
 
-    // public static void main(String[] args) {
-    //     ChessGame game = new ChessGame();
-    //     game.setBoard(game.loadBoard("""
-    //     | | | | | | | | |
-    //     | | |P| | | | | |
-    //     | | | | | | | | |
-    //     | | | | | | | | |
-    //     | | | | | | | | |
-    //     | | | | | | | | |
-    //     | | | | |p| | | |
-    //     | | | | | |Q| | |
-    //     """));
-    //     System.out.println(game.activeBoard.toString());
-    //     game.setTeamTurn(ChessGame.TeamColor.WHITE);
-    //     ChessMove whitePromotion = new ChessMove(new ChessPosition(7, 3), new ChessPosition(8, 3), ChessPiece.PieceType.QUEEN);
-    //     try { 
-    //         game.makeMove(whitePromotion);
-    //     } catch (InvalidMoveException e) {
-    //         System.out.println(e.getMessage());
-    //     }
-    //     System.out.println(game.activeBoard.toString());
-    // }
-
     /**
      * Makes a move in a chess game
      *
@@ -123,7 +102,7 @@ public class ChessGame {
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessPiece piece = activeBoard.getPiece(move.getStartPosition());
-        if (piece == null || piece.getTeamColor() == getOpponent()) {
+        if (piece == null || piece.getTeamColor() == getOpponent(teamTurn)) {
             throw new InvalidMoveException("Illegal move: piece does not exist or out of turn");
         }
         Collection<ChessMove> legalMoves = validMoves(move.getStartPosition());
@@ -135,7 +114,7 @@ public class ChessGame {
             ChessPiece prometedPiece = activeBoard.getPiece(move.getEndPosition());
             prometedPiece.promotePawn(move);
         }
-        teamTurn = getOpponent();
+        teamTurn = getOpponent(teamTurn);
     }
 
     /**
@@ -146,7 +125,7 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingsPosition = locateKingPosition(teamColor);
-        return isUnderAttack(kingsPosition, getOpponent());
+        return isUnderAttack(kingsPosition, getOpponent(teamColor));
     }
 
     private ChessPosition locateKingPosition(TeamColor teamColor) {
